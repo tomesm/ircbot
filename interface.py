@@ -35,10 +35,10 @@ class IRCBotShellInterface(IRCBotInterface):
         pass
 
     def read(self):
-        return raw_input("> ")
+        return input("> ")
 
     def write(self, msg):
-        print msg
+        print(msg)
 
     def open(self):
         pass
@@ -103,7 +103,7 @@ class IRCBotTelnetInterface(IRCBotInterface):
                 self._listen = sock
 
             except (socket.error, socket.timeout, IOError) as ex:
-                print str(ex)
+                print(str(ex))
 
         if self._listen == None:
             raise Exception("No valid address found")
@@ -125,5 +125,5 @@ if __name__ == "__main__":
         if data == "":
             break
 
-        print "Received:", data
+        print("Received:", data)
         x.write(data)

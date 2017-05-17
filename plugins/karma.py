@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import state
+from . import state
 
 KARMA = {}
 
@@ -11,16 +11,12 @@ def command_karma(name):
     @type name: str
     @returns: message with actual karma
     """
-
     global KARMA
-
     # ignore empty parameter
     if name == "":
         return state.next()
-
     if name not in KARMA:
         return state.done("%s has no karma" % name)
-
     return state.done("%s's karma is %s" % (name, KARMA[name]))
 
 def filter_karma(msg):
@@ -31,25 +27,20 @@ def filter_karma(msg):
     @type msg: str
     @rtype: state.done|state.next
     """
-
     global KARMA
-
     msg = msg.lower()
     for word in msg.split():
         # ignore the '[cC]++' string
         if word == "c++":
             continue
-
         # check whether the word ends with ++/--
         if not (word.endswith("++") or word.endswith("--")):
             continue
-
         key = word[:-2]
         # if the string in `word` is shorter than 2 characters, then
         # `key` contains empty string
         if key == "":
             continue
-
         KARMA.setdefault(key, 0)
         KARMA[key] += 1 if word.endswith('++') else -1
         # ^^^ is "the right way" of selecting values, but needs Python >= 2.5
@@ -66,6 +57,5 @@ def filter_karma(msg):
         # if the 'final' karma is 0, delete the key from the dictionary
         if KARMA[key] == 0:
             del KARMA[key]
-
     return state.next()
 

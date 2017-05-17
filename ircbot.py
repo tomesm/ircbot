@@ -4,8 +4,6 @@ Created on Fri Nov  2 14:49:32 2012
 
 @author: tomesh
 """
-
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -14,12 +12,7 @@ import plugins
 from plugins import state
 from plugins import ping
 
-
-
-
 #-------------- BOT ---------------#
-
-
 
 class IrcBot(object):
     """
@@ -44,29 +37,23 @@ class IrcBot(object):
         @return: message to print or None (if there's no output to print)
         @rtype: str|None
         """
-
         # split msg into command & arguments
         try:
            command, args = msg.split(None, 1)
         except ValueError: # split failed
             command, args = msg.rstrip(), ""
-
         # try execute command
         if command in self.COMMANDS:
             rval = self.COMMANDS[command](args)
-
             if state.is_done(rval):
                 return rval.value
-
         # run text HOOKS
         for f in self.FILTERS:
             rval = f(msg)
             if state.is_done(rval):
                 return rval.value
-
             if state.is_replace(rval):
                 msg = rval.value
-
         return msg
 
     def run(self):
@@ -84,16 +71,12 @@ class IrcBot(object):
 if __name__ == "__main__":
     ifc = interface.IRCBotShellInterface()
     ifc.open()
-
     try:
-
         ping = ping.Ping(ifc)
         ping.start()
         bot = IrcBot(ifc)
         bot.run()
-
-
     except (KeyboardInterrupt, EOFError, SystemExit):
-        print "Shutting down the Bot!"
+        print("Shutting down the Bot!")
         ifc.close()
         sys.exit(0)
